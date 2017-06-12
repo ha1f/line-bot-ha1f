@@ -1,0 +1,15 @@
+{
+  "name": "line-bot-ha1f",
+  "description": "line-bot-ha1f",
+  "repository": "https://github.com/ha1f/line-bot-ha1f",
+  "env": {
+    "LINE_BOT_CHANNEL_TOKEN": {
+      "description": "Channel token",
+      "required": true
+    },
+    "LINE_BOT_CHANNEL_SECRET": {
+      "description": "Channel secret",
+      "required": true
+    }
+  }
+}
