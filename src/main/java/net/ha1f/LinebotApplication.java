@@ -78,8 +78,7 @@ public class LinebotApplication {
         } else if (text.contains("みきてぃ")) {
             message = new TextMessage("みきてぃやん！おはよー！");
         } else if (ImmutableList.of("つかれた", "疲れた", "がんばった", "頑張った", "しんどい", "つらい", "ねむい", "眠い").stream()
-                                .anyMatch(
-                                        text::contains)) {
+                                .anyMatch(text::contains)) {
             Random r = new Random(System.currentTimeMillis());
             final List<String> candidates = ImmutableList.of("頑張ったね！お疲れ様！",
                                                              "今度ご飯行こうね",
@@ -89,8 +88,7 @@ public class LinebotApplication {
                                                              "頑張りすぎないようにね",
                                                              "大丈夫？おっぱい揉む？");
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
-        } else if (ImmutableList.of("ほめて", "すごい", "でしょ").stream().anyMatch(
-                text::endsWith)) {
+        } else if (ImmutableList.of("ほめて", "すごい", "でしょ").stream().anyMatch(text::endsWith)) {
             Random r = new Random(System.currentTimeMillis());
             final List<String> candidates = ImmutableList.of("すごい！",
                                                              "がんばったね！",
@@ -98,12 +96,13 @@ public class LinebotApplication {
                                                              "いつも頑張ってるの知ってるよ！",
                                                              "さすがすぎる！");
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
-        } else if (ImmutableList.of("わーい", "やったー", "いえーい", "いぇい").stream().anyMatch(text::contains)) {
+        } else if (ImmutableList.of("わーい", "やった", "いえーい", "いぇい").stream().anyMatch(text::contains)) {
             Random r = new Random(System.currentTimeMillis());
             final List<String> candidates = ImmutableList.of("わーい！", "やったー！", "いぇい！");
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
-        } else if (ImmutableList.of("ありがとう", "感謝", "thank", "うれしい", "嬉しい", "たのしい", "楽しい").stream().anyMatch(
-                text::contains)) {
+        } else if (ImmutableList.of("ありがとう", "感謝", "thank", "うれしい", "嬉しい", "たのしい", "楽しい", "うれちい", "優しい", "やさしい")
+                                .stream()
+                                .anyMatch(text::contains)) {
             Random r = new Random(System.currentTimeMillis());
             final List<String> candidates = ImmutableList.of("いえいえ", "こちらこそ！", "どういたしまして〜😊", "ありがと！");
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
