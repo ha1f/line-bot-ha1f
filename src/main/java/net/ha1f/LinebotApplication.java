@@ -109,7 +109,8 @@ public class LinebotApplication {
         } else if (ImmutableList.of("死にたい", "しにたい").stream().anyMatch(text::contains)) {
             message = new TextMessage("ありたく「死なないことが大事！」");
         } else if (text.contains("はるふ")
-                   && ImmutableList.of("退出", "退出して", "でていって", "出ていって", "退出願います").stream()
+                   && ImmutableList.of("退出", "退出して", "でていって", "出ていって", "退出願います", "ばいばい", "バイバイ", "さよなら",
+                                       "さよーなら", "さようなら").stream()
                                    .anyMatch(text::endsWith)) {
             leaveCall = leaveRequest(event.getSource());
             if (leaveCall != null) {
