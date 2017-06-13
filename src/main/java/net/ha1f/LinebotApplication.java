@@ -73,8 +73,15 @@ public class LinebotApplication {
                                                              "がんばったね！",
                                                              "お疲れ様！",
                                                              "いつも頑張ってるの知ってるよ！",
-                                                             "次あった時ぎゅってしような",
                                                              "さすがすぎる！");
+            message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
+        } else if (ImmutableList.of("わーい", "やったー").stream().anyMatch(text::contains)) {
+            Random r = new Random(System.currentTimeMillis());
+            final List<String> candidates = ImmutableList.of("わーい！", "やったー！", "いぇい！");
+            message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
+        } else if (ImmutableList.of("ありがとう", "感謝", "thank").stream().anyMatch(text::contains)) {
+            Random r = new Random(System.currentTimeMillis());
+            final List<String> candidates = ImmutableList.of("いえいえ", "こちらこそ！", "どういたしまして〜😊");
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
         } else if (ImmutableList.of("死にたい", "しにたい").stream().anyMatch(text::contains)) {
             message = new TextMessage("ありたく「死なないことが大事！」");
