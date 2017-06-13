@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.google.common.collect.ImmutableList;
+import com.sun.istack.internal.Nullable;
 
 import com.linecorp.bot.client.LineMessagingService;
 import com.linecorp.bot.model.ReplyMessage;
@@ -31,6 +32,8 @@ import com.linecorp.bot.model.response.BotApiResponse;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
+import retrofit2.Call;
+
 @SpringBootApplication
 @LineMessageHandler
 public class LinebotApplication {
@@ -45,18 +48,33 @@ public class LinebotApplication {
     }
 
     private static void logEvent(Event event) {
-        System.out.println("event: " + event);
+        System.out.println("event received");
     }
 
     private static void logResponse(BotApiResponse response) {
-        System.out.println("message sent: " + response);
+        System.out.println("message sent");
+    }
+
+    @Nullable
+    private Call<BotApiResponse> leaveRequest(Source source) throws Exception {
+        if (source instanceof GroupSource) {
+            return lineMessagingService.leaveGroup(
+                    ((GroupSource) source).getGroupId());
+        } else if (source instanceof RoomSource) {
+            return lineMessagingService.leaveRoom(
+                    ((RoomSource) source).getRoomId());
+        }
+        return null;
     }
 
     @EventMapping
     public void handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
         logEvent(event);
+        Call<BotApiResponse> leaveCall = null;
+
         final String text = SUFFIX_MARK.matcher(event.getMessage().getText()).replaceFirst("");
-        final Message message;
+
+        Message message;
         if (text.contains("みきてぃ")) {
             message = new TextMessage("みきてぃやん！おはよー！");
         } else if (ImmutableList.of("つかれた", "疲れた", "がんばった", "頑張った", "しんどい", "つらい", "ねむい", "眠い").stream()
@@ -93,19 +111,11 @@ public class LinebotApplication {
         } else if (text.contains("はるふ")
                    && ImmutableList.of("退出", "退出して", "でていって", "出ていって", "退出願います").stream()
                                    .anyMatch(text::endsWith)) {
-            final Source source = event.getSource();
-            if (source instanceof GroupSource) {
+            leaveCall = leaveRequest(event.getSource());
+            if (leaveCall != null) {
                 message = new TextMessage("また遊んでね！");
-                final BotApiResponse apiResponse = lineMessagingService.leaveGroup(
-                        ((GroupSource) source).getGroupId()).execute().body();
-                logResponse(apiResponse);
-            } else if (source instanceof RoomSource) {
-                message = new TextMessage("また遊んでね！");
-                final BotApiResponse apiResponse = lineMessagingService.leaveRoom(
-                        ((RoomSource) source).getRoomId()).execute().body();
-                logResponse(apiResponse);
             } else {
-                message = new TextMessage("二人きりなのに！");
+                message = new TextMessage("二人きりの時間を楽しもうな");
             }
         } else {
             if (text.endsWith("やで")) {
@@ -114,10 +124,16 @@ public class LinebotApplication {
                 message = new TextMessage(text + "やで");
             }
         }
+
         final BotApiResponse apiResponse = lineMessagingService
                 .replyMessage(new ReplyMessage(event.getReplyToken(), Collections.singletonList(message)))
                 .execute().body();
         logResponse(apiResponse);
+
+        if (leaveCall != null) {
+            final BotApiResponse leaveResponse = leaveCall.execute().body();
+            logResponse(leaveResponse);
+        }
     }
 
     @EventMapping
