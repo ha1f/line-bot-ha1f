@@ -10,7 +10,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.google.common.collect.ImmutableList;
-import com.sun.istack.internal.Nullable;
 
 import com.linecorp.bot.client.LineMessagingService;
 import com.linecorp.bot.model.ReplyMessage;
@@ -54,8 +53,7 @@ public class LinebotApplication {
     private static void logResponse(BotApiResponse response) {
         System.out.println("message sent");
     }
-
-    @Nullable
+    
     private Call<BotApiResponse> leaveRequest(Source source) throws Exception {
         if (source instanceof GroupSource) {
             return lineMessagingService.leaveGroup(
