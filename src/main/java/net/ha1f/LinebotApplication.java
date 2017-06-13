@@ -3,6 +3,7 @@ package net.ha1f;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -34,6 +35,8 @@ import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 @LineMessageHandler
 public class LinebotApplication {
 
+    private static final Pattern SUFFIX_MARK = Pattern.compile("[?？!！。、,.〜ー]+$");
+
     @Autowired
     private LineMessagingService lineMessagingService;
 
@@ -45,14 +48,16 @@ public class LinebotApplication {
         System.out.println("event: " + event);
     }
 
+    private static void logResponse(BotApiResponse response) {
+        System.out.println("message sent: " + response);
+    }
+
     @EventMapping
     public void handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
-        System.out.println("event: " + event);
-        final String text = event.getMessage().getText();
+        logEvent(event);
+        final String text = SUFFIX_MARK.matcher(event.getMessage().getText()).replaceFirst("");
         final Message message;
-        if (text.endsWith("やで")) {
-            message = new TextMessage(text);
-        } else if (text.contains("みきてぃ")) {
+        if (text.contains("みきてぃ")) {
             message = new TextMessage("みきてぃやん！おはよー！");
         } else if (ImmutableList.of("つかれた", "疲れた", "がんばった", "頑張った", "しんどい", "つらい", "ねむい", "眠い").stream()
                                 .anyMatch(
@@ -66,7 +71,7 @@ public class LinebotApplication {
                                                              "頑張りすぎないようにね",
                                                              "大丈夫？おっぱい揉む？");
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
-        } else if (ImmutableList.of("ほめて？", "ほめて", "すごい？", "でしょ？").stream().anyMatch(
+        } else if (ImmutableList.of("ほめて", "すごい", "でしょ").stream().anyMatch(
                 text::endsWith)) {
             Random r = new Random(System.currentTimeMillis());
             final List<String> candidates = ImmutableList.of("すごい！",
@@ -85,24 +90,34 @@ public class LinebotApplication {
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
         } else if (ImmutableList.of("死にたい", "しにたい").stream().anyMatch(text::contains)) {
             message = new TextMessage("ありたく「死なないことが大事！」");
-        } else if (text.endsWith("退出")) {
+        } else if (text.contains("はるふ")
+                   && ImmutableList.of("退出", "退出して", "でていって", "出ていって", "退出願います").stream()
+                                   .anyMatch(text::endsWith)) {
             final Source source = event.getSource();
             if (source instanceof GroupSource) {
                 message = new TextMessage("また遊んでね！");
-                lineMessagingService.leaveGroup(((GroupSource) source).getGroupId());
+                final BotApiResponse apiResponse = lineMessagingService.leaveGroup(
+                        ((GroupSource) source).getGroupId()).execute().body();
+                logResponse(apiResponse);
             } else if (source instanceof RoomSource) {
                 message = new TextMessage("また遊んでね！");
-                lineMessagingService.leaveRoom(((RoomSource) source).getRoomId());
+                final BotApiResponse apiResponse = lineMessagingService.leaveRoom(
+                        ((RoomSource) source).getRoomId()).execute().body();
+                logResponse(apiResponse);
             } else {
                 message = new TextMessage("二人きりなのに！");
             }
         } else {
-            message = new TextMessage(text + "やで");
+            if (text.endsWith("やで")) {
+                message = new TextMessage(text);
+            } else {
+                message = new TextMessage(text + "やで");
+            }
         }
         final BotApiResponse apiResponse = lineMessagingService
                 .replyMessage(new ReplyMessage(event.getReplyToken(), Collections.singletonList(message)))
                 .execute().body();
-        System.out.println("Sent messages: " + apiResponse);
+        logResponse(apiResponse);
     }
 
     @EventMapping
@@ -125,9 +140,6 @@ public class LinebotApplication {
                                                Collections.singletonList(new TextMessage("画像送信ありがとうございます！"))))
                 .execute().body();
         System.out.println("Sent messages: " + apiResponse);
-
-        // lineMessagingService.replyMessage(new ReplyMessage(event.getReplyToken(), Collections
-        // .singletonList(new ImagemapMessage())))
     }
 
     @EventMapping
@@ -137,7 +149,7 @@ public class LinebotApplication {
                 .replyMessage(new ReplyMessage(event.getReplyToken(),
                                                Collections.singletonList(new TextMessage("動画送信ありがとうございます！"))))
                 .execute().body();
-        System.out.println("Sent messages: " + apiResponse);
+        logResponse(apiResponse);
     }
 
     @EventMapping
@@ -147,7 +159,7 @@ public class LinebotApplication {
                 .replyMessage(new ReplyMessage(event.getReplyToken(),
                                                Collections.singletonList(new TextMessage("音声送信ありがとうございます！"))))
                 .execute().body();
-        System.out.println("Sent messages: " + apiResponse);
+        logResponse(apiResponse);
     }
 
     @EventMapping
@@ -157,7 +169,7 @@ public class LinebotApplication {
                 .replyMessage(new ReplyMessage(event.getReplyToken(),
                                                Collections.singletonList(new TextMessage("友だち追加ありがとう〜"))))
                 .execute().body();
-        System.out.println("Sent messages: " + apiResponse);
+        logResponse(apiResponse);
     }
 
     @EventMapping
@@ -168,11 +180,11 @@ public class LinebotApplication {
                 .replyMessage(new ReplyMessage(event.getReplyToken(),
                                                Collections.singletonList(m1)))
                 .execute().body();
-        System.out.println("Sent messages: " + apiResponse);
+        logResponse(apiResponse);
     }
 
     @EventMapping
     public void defaultMessageEvent(Event event) {
-        System.out.println("event: " + event);
+        logEvent(event);
     }
 }
