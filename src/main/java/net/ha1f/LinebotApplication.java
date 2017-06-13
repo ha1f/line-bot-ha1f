@@ -37,7 +37,7 @@ import retrofit2.Call;
 @LineMessageHandler
 public class LinebotApplication {
 
-    private static final Pattern SUFFIX_MARK = Pattern.compile("(やろ|やん|やんけ)*[?？!！。、,.〜ーｗw]+$");
+    private static final Pattern SUFFIX_MARK = Pattern.compile("(やろ|やん|やんけ|[?？!！。、,.〜ーｗw])+$");
 
     @Autowired
     private LineMessagingService lineMessagingService;
@@ -73,7 +73,9 @@ public class LinebotApplication {
         final String text = SUFFIX_MARK.matcher(event.getMessage().getText()).replaceFirst("");
 
         Message message;
-        if (text.contains("みきてぃ")) {
+        if (text.isEmpty()) {
+            message = new TextMessage("内容なすぎ！");
+        } else if (text.contains("みきてぃ")) {
             message = new TextMessage("みきてぃやん！おはよー！");
         } else if (ImmutableList.of("つかれた", "疲れた", "がんばった", "頑張った", "しんどい", "つらい", "ねむい", "眠い").stream()
                                 .anyMatch(
