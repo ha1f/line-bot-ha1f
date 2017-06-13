@@ -37,7 +37,7 @@ import retrofit2.Call;
 @LineMessageHandler
 public class LinebotApplication {
 
-    private static final Pattern SUFFIX_MARK = Pattern.compile("[?？!！。、,.〜ー]+$");
+    private static final Pattern SUFFIX_MARK = Pattern.compile("(やろ|やん|やんけ)*[?？!！。、,.〜ーｗw]+$");
 
     @Autowired
     private LineMessagingService lineMessagingService;
@@ -53,7 +53,7 @@ public class LinebotApplication {
     private static void logResponse(BotApiResponse response) {
         System.out.println("message sent");
     }
-    
+
     private Call<BotApiResponse> leaveRequest(Source source) throws Exception {
         if (source instanceof GroupSource) {
             return lineMessagingService.leaveGroup(
@@ -96,13 +96,14 @@ public class LinebotApplication {
                                                              "いつも頑張ってるの知ってるよ！",
                                                              "さすがすぎる！");
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
-        } else if (ImmutableList.of("わーい", "やったー").stream().anyMatch(text::contains)) {
+        } else if (ImmutableList.of("わーい", "やったー", "いえーい", "いぇい").stream().anyMatch(text::contains)) {
             Random r = new Random(System.currentTimeMillis());
             final List<String> candidates = ImmutableList.of("わーい！", "やったー！", "いぇい！");
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
-        } else if (ImmutableList.of("ありがとう", "感謝", "thank").stream().anyMatch(text::contains)) {
+        } else if (ImmutableList.of("ありがとう", "感謝", "thank", "うれしい", "嬉しい", "たのしい", "楽しい").stream().anyMatch(
+                text::contains)) {
             Random r = new Random(System.currentTimeMillis());
-            final List<String> candidates = ImmutableList.of("いえいえ", "こちらこそ！", "どういたしまして〜😊");
+            final List<String> candidates = ImmutableList.of("いえいえ", "こちらこそ！", "どういたしまして〜😊", "ありがと！");
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
         } else if (ImmutableList.of("死にたい", "しにたい").stream().anyMatch(text::contains)) {
             message = new TextMessage("ありたく「死なないことが大事！」");
