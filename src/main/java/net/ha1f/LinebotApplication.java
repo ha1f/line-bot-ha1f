@@ -118,8 +118,6 @@ public class LinebotApplication {
             } else {
                 message = new TextMessage("二人きりの時間を楽しもうな");
             }
-        } else if (text.contains("サイズ")) {
-            message = new TextMessage("CよりのBかな");
         } else {
             if (text.endsWith("やで")) {
                 message = new TextMessage(text);
@@ -156,7 +154,7 @@ public class LinebotApplication {
         logEvent(event);
         final BotApiResponse apiResponse = lineMessagingService
                 .replyMessage(new ReplyMessage(event.getReplyToken(),
-                                               Collections.singletonList(new TextMessage("π/"))))
+                                               Collections.singletonList(new TextMessage("画像送信ありがとうございます！"))))
                 .execute().body();
         System.out.println("Sent messages: " + apiResponse);
     }
