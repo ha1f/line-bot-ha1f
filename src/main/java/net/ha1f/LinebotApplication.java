@@ -6,7 +6,6 @@ import java.util.Random;
 import java.util.regex.Pattern;
 
 import com.linecorp.bot.model.event.message.*;
-import com.oracle.tools.packager.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
