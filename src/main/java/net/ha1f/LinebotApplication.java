@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+import com.linecorp.bot.model.event.message.*;
+import com.oracle.tools.packager.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,11 +19,6 @@ import com.linecorp.bot.model.event.BeaconEvent;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.FollowEvent;
 import com.linecorp.bot.model.event.MessageEvent;
-import com.linecorp.bot.model.event.message.AudioMessageContent;
-import com.linecorp.bot.model.event.message.ImageMessageContent;
-import com.linecorp.bot.model.event.message.StickerMessageContent;
-import com.linecorp.bot.model.event.message.TextMessageContent;
-import com.linecorp.bot.model.event.message.VideoMessageContent;
 import com.linecorp.bot.model.event.source.GroupSource;
 import com.linecorp.bot.model.event.source.RoomSource;
 import com.linecorp.bot.model.event.source.Source;
@@ -41,6 +38,9 @@ public class LinebotApplication {
 
     @Autowired
     private LineMessagingService lineMessagingService;
+
+    private static String yukariId = "";
+    private static Integer yukariPhase = 0;
 
     public static void main(String[] args) {
         SpringApplication.run(LinebotApplication.class, args);
@@ -65,18 +65,54 @@ public class LinebotApplication {
         return null;
     }
 
+    private BotApiResponse replyWithSingleMessage(String replyToken, Message message) throws Exception {
+        final BotApiResponse apiResponse = lineMessagingService
+                .replyMessage(new ReplyMessage(replyToken, Collections.singletonList(message)))
+                .execute().body();
+        logResponse(apiResponse);
+        return apiResponse;
+    }
+
     @EventMapping
     public void handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
         logEvent(event);
         Call<BotApiResponse> leaveCall = null;
 
-        final String text = SUFFIX_MARK.matcher(event.getMessage().getText()).replaceFirst("");
+        final String senderId = event.getSource().getSenderId();
+        final String originalText = event.getMessage().getText();
+        final Boolean isQuestion = ImmutableList.of("?", "？").stream().anyMatch(originalText::endsWith);
+        final String text = SUFFIX_MARK.matcher(originalText).replaceFirst("");
+        final String replyToken = event.getReplyToken();
+
+        // ゆかり
+        if (text.contains("ゆかり") && !text.endsWith("て言って")) {
+            yukariId = senderId;
+            System.out.println("yukariId set: " + yukariId);
+        }
+        // [debug] check yukariId
+        if (text.equals("yukariId")) {
+            replyWithSingleMessage(replyToken, new TextMessage(yukariId));
+            return;
+        }
+        // [debug] check yukariPhase
+        if (text.equals("yukariPhase")) {
+            replyWithSingleMessage(replyToken, new TextMessage(yukariPhase.toString()));
+            return;
+        }
+        // [command] increment yukariPhase
+        if (text.equals("次")) {
+            replyWithSingleMessage(replyToken, new TextMessage("incremented: " + yukariPhase.toString()));
+            return;
+        }
+        // ゆかりによるメッセ
+        if (yukariId != null && senderId != null && !yukariId.isEmpty() && senderId.equals(yukariId)) {
+            //
+        }
+
 
         Message message;
         if (text.isEmpty()) {
             message = new TextMessage("内容なすぎ！");
-        } else if (text.contains("みきてぃ")) {
-            message = new TextMessage("みきてぃやん！おはよー！");
         } else if (ImmutableList.of("つかれた", "疲れた", "がんばった", "頑張った", "しんどい", "つらい", "ねむい", "眠い").stream()
                                 .anyMatch(text::contains)) {
             Random r = new Random(System.currentTimeMillis());
@@ -126,14 +162,12 @@ public class LinebotApplication {
             }
         }
 
-        final BotApiResponse apiResponse = lineMessagingService
-                .replyMessage(new ReplyMessage(event.getReplyToken(), Collections.singletonList(message)))
-                .execute().body();
-        logResponse(apiResponse);
+        replyWithSingleMessage(event.getReplyToken(), message);
 
         if (leaveCall != null) {
             final BotApiResponse leaveResponse = leaveCall.execute().body();
             logResponse(leaveResponse);
+
         }
     }
 
