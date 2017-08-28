@@ -33,7 +33,7 @@ import retrofit2.Call;
 @LineMessageHandler
 public class LinebotApplication {
 
-    private static final Pattern SUFFIX_MARK = Pattern.compile("(やろ|やん|やんけ|[?？!！。、,.〜ーｗw])+$");
+    private static final Pattern SUFFIX_MARK = Pattern.compile("(だよ|やろ|やん|やんけ|[?？!！。、,.〜ーｗw])+$");
 
     @Autowired
     private LineMessagingService lineMessagingService;
@@ -64,12 +64,16 @@ public class LinebotApplication {
         return null;
     }
 
-    private BotApiResponse replyWithSingleMessage(String replyToken, Message message) throws Exception {
+    private BotApiResponse replyWithMessages(String replyToken, List<Message> messages) throws Exception {
         final BotApiResponse apiResponse = lineMessagingService
-                .replyMessage(new ReplyMessage(replyToken, Collections.singletonList(message)))
+                .replyMessage(new ReplyMessage(replyToken, messages))
                 .execute().body();
         logResponse(apiResponse);
         return apiResponse;
+    }
+
+    private BotApiResponse replyWithSingleMessage(String replyToken, Message message) throws Exception {
+        return replyWithMessages(replyToken, Collections.singletonList(message));
     }
 
     @EventMapping
@@ -86,6 +90,7 @@ public class LinebotApplication {
         // ゆかり
         if (text.contains("ゆかり") && !text.endsWith("て言って")) {
             yukariId = senderId;
+            yukariPhase = 0;
             System.out.println("yukariId set: " + yukariId);
         }
         // [debug] check yukariId
@@ -99,13 +104,54 @@ public class LinebotApplication {
             return;
         }
         // [command] increment yukariPhase
-        if (text.equals("次")) {
+        if (text.equals("increment")) {
+            yukariPhase += 1;
             replyWithSingleMessage(replyToken, new TextMessage("incremented: " + yukariPhase.toString()));
+            return;
+        } else if (text.equals("decrement")) {
+            yukariPhase -= 1;
+            replyWithSingleMessage(replyToken, new TextMessage("decremented: " + yukariPhase.toString()));
+            return;
+        } else if (text.equals("reset")) {
+            yukariPhase = 0;
+            replyWithSingleMessage(replyToken, new TextMessage("reset: " + yukariPhase.toString()));
             return;
         }
         // ゆかりによるメッセ
         if (yukariId != null && senderId != null && !yukariId.isEmpty() && senderId.equals(yukariId)) {
-            //
+            if (yukariPhase == 0) {
+                replyWithMessages(replyToken,
+                        ImmutableList.of(
+                                new TextMessage("仕事お疲れ様！！")
+                        ));
+            } else if (yukariPhase == 1) {
+                replyWithMessages(replyToken,
+                        ImmutableList.of(
+                                new TextMessage("単刀直入にね！ゆかりが好きなんよ"),
+                                new TextMessage("知ってただろうけど！")
+                        ));
+            } else if (yukariPhase == 2) {
+                replyWithMessages(replyToken,
+                        ImmutableList.of(
+                                new TextMessage("色々壁はあって、少し悩んでたし、遠慮していた部分が多かったけど"),
+                                new TextMessage("でも逆にそれが困惑させてたの、本当に阿呆だった！")
+                        ));
+            }  else if (yukariPhase == 3) {
+                replyWithMessages(replyToken,
+                        ImmutableList.of(
+                                new TextMessage("だから、阿呆は阿呆らしく、自分に正直になると、"),
+                                new TextMessage("これからもずっと一緒に旅行行ったりゲームしたりしたい")
+                        ));
+            }  else if (yukariPhase == 4) {
+                replyWithMessages(replyToken,
+                        ImmutableList.of(
+                                new TextMessage("ので！")
+                        ));
+            } else {
+                return;
+            }
+            yukariPhase += 1;
+            return;
         }
 
 
