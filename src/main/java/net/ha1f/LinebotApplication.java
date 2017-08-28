@@ -87,72 +87,72 @@ public class LinebotApplication {
         final String text = SUFFIX_MARK.matcher(originalText).replaceFirst("");
         final String replyToken = event.getReplyToken();
 
-        // ゆかり
-        if (text.contains("ゆかり") && !text.endsWith("て言って")) {
-            yukariId = senderId;
-            yukariPhase = 0;
-            System.out.println("yukariId set: " + yukariId);
-        }
-        // [debug] check yukariId
-        if (text.equals("yukariId")) {
-            replyWithSingleMessage(replyToken, new TextMessage(yukariId));
-            return;
-        }
-        // [debug] check yukariPhase
-        if (text.equals("yukariPhase")) {
-            replyWithSingleMessage(replyToken, new TextMessage(yukariPhase.toString()));
-            return;
-        }
-        // [command] increment yukariPhase
-        if (text.equals("increment")) {
-            yukariPhase += 1;
-            replyWithSingleMessage(replyToken, new TextMessage("incremented: " + yukariPhase.toString()));
-            return;
-        } else if (text.equals("decrement")) {
-            yukariPhase -= 1;
-            replyWithSingleMessage(replyToken, new TextMessage("decremented: " + yukariPhase.toString()));
-            return;
-        } else if (text.equals("reset")) {
-            yukariPhase = 0;
-            replyWithSingleMessage(replyToken, new TextMessage("reset: " + yukariPhase.toString()));
-            return;
-        }
-        // ゆかりによるメッセ
-        if (yukariId != null && senderId != null && !yukariId.isEmpty() && senderId.equals(yukariId)) {
-            if (yukariPhase == 0) {
-                replyWithMessages(replyToken,
-                        ImmutableList.of(
-                                new TextMessage("仕事お疲れ様！！")
-                        ));
-            } else if (yukariPhase == 1) {
-                replyWithMessages(replyToken,
-                        ImmutableList.of(
-                                new TextMessage("単刀直入にね！ゆかりが好きなんよ"),
-                                new TextMessage("知ってただろうけど！")
-                        ));
-            } else if (yukariPhase == 2) {
-                replyWithMessages(replyToken,
-                        ImmutableList.of(
-                                new TextMessage("色々壁はあって、少し悩んでたし、遠慮していた部分が多かったけど"),
-                                new TextMessage("でも逆にそれが困惑させてたの、本当に阿呆だった！")
-                        ));
-            }  else if (yukariPhase == 3) {
-                replyWithMessages(replyToken,
-                        ImmutableList.of(
-                                new TextMessage("だから、阿呆は阿呆らしく、自分に正直になると、"),
-                                new TextMessage("これからもずっと一緒に旅行行ったりゲームしたりしたい")
-                        ));
-            }  else if (yukariPhase == 4) {
-                replyWithMessages(replyToken,
-                        ImmutableList.of(
-                                new TextMessage("ので！")
-                        ));
-            } else {
-                return;
-            }
-            yukariPhase += 1;
-            return;
-        }
+//        // ゆかり
+//        if (text.contains("ゆかり") && !text.endsWith("て言って")) {
+//            yukariId = senderId;
+//            yukariPhase = 0;
+//            System.out.println("yukariId set: " + yukariId);
+//        }
+//        // [debug] check yukariId
+//        if (text.equals("yukariId")) {
+//            replyWithSingleMessage(replyToken, new TextMessage(yukariId));
+//            return;
+//        }
+//        // [debug] check yukariPhase
+//        if (text.equals("yukariPhase")) {
+//            replyWithSingleMessage(replyToken, new TextMessage(yukariPhase.toString()));
+//            return;
+//        }
+//        // [command] increment yukariPhase
+//        if (text.equals("increment")) {
+//            yukariPhase += 1;
+//            replyWithSingleMessage(replyToken, new TextMessage("incremented: " + yukariPhase.toString()));
+//            return;
+//        } else if (text.equals("decrement")) {
+//            yukariPhase -= 1;
+//            replyWithSingleMessage(replyToken, new TextMessage("decremented: " + yukariPhase.toString()));
+//            return;
+//        } else if (text.equals("reset")) {
+//            yukariPhase = 0;
+//            replyWithSingleMessage(replyToken, new TextMessage("reset: " + yukariPhase.toString()));
+//            return;
+//        }
+//        // ゆかりによるメッセ
+//        if (yukariId != null && senderId != null && !yukariId.isEmpty() && senderId.equals(yukariId)) {
+//            if (yukariPhase == 0) {
+//                replyWithMessages(replyToken,
+//                        ImmutableList.of(
+//                                new TextMessage("仕事お疲れ様！！")
+//                        ));
+//            } else if (yukariPhase == 1) {
+//                replyWithMessages(replyToken,
+//                        ImmutableList.of(
+//                                new TextMessage("単刀直入にね！ゆかりが好きなんよ"),
+//                                new TextMessage("知ってただろうけど！")
+//                        ));
+//            } else if (yukariPhase == 2) {
+//                replyWithMessages(replyToken,
+//                        ImmutableList.of(
+//                                new TextMessage("色々壁はあって、少し悩んでたし、遠慮していた部分が多かったけど"),
+//                                new TextMessage("でも逆にそれが困惑させてたの、本当に阿呆だった！")
+//                        ));
+//            }  else if (yukariPhase == 3) {
+//                replyWithMessages(replyToken,
+//                        ImmutableList.of(
+//                                new TextMessage("だから、阿呆は阿呆らしく、自分に正直になると、"),
+//                                new TextMessage("これからもずっと一緒に旅行行ったりゲームしたりしたい")
+//                        ));
+//            }  else if (yukariPhase == 4) {
+//                replyWithMessages(replyToken,
+//                        ImmutableList.of(
+//                                new TextMessage("ので！")
+//                        ));
+//            } else {
+//                return;
+//            }
+//            yukariPhase += 1;
+//            return;
+//        }
 
 
         Message message;
