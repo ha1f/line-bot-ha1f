@@ -33,13 +33,10 @@ import retrofit2.Call;
 @LineMessageHandler
 public class LinebotApplication {
 
-    private static final Pattern SUFFIX_MARK = Pattern.compile("(だよ|やろ|やん|やんけ|[?？!！。、,.〜ーｗw])+$");
+    private static final Pattern SUFFIX_MARK = Pattern.compile("(やなぁ|だよ|やろ|やん|やんけ|[?？!！。、,.〜ーｗw])+$");
 
     @Autowired
     private LineMessagingService lineMessagingService;
-
-    private static String yukariId = "";
-    private static Integer yukariPhase = 0;
 
     public static void main(String[] args) {
         SpringApplication.run(LinebotApplication.class, args);
@@ -87,74 +84,6 @@ public class LinebotApplication {
         final String text = SUFFIX_MARK.matcher(originalText).replaceFirst("");
         final String replyToken = event.getReplyToken();
 
-//        // ゆかり
-//        if (text.contains("ゆかり") && !text.endsWith("て言って")) {
-//            yukariId = senderId;
-//            yukariPhase = 0;
-//            System.out.println("yukariId set: " + yukariId);
-//        }
-//        // [debug] check yukariId
-//        if (text.equals("yukariId")) {
-//            replyWithSingleMessage(replyToken, new TextMessage(yukariId));
-//            return;
-//        }
-//        // [debug] check yukariPhase
-//        if (text.equals("yukariPhase")) {
-//            replyWithSingleMessage(replyToken, new TextMessage(yukariPhase.toString()));
-//            return;
-//        }
-//        // [command] increment yukariPhase
-//        if (text.equals("increment")) {
-//            yukariPhase += 1;
-//            replyWithSingleMessage(replyToken, new TextMessage("incremented: " + yukariPhase.toString()));
-//            return;
-//        } else if (text.equals("decrement")) {
-//            yukariPhase -= 1;
-//            replyWithSingleMessage(replyToken, new TextMessage("decremented: " + yukariPhase.toString()));
-//            return;
-//        } else if (text.equals("reset")) {
-//            yukariPhase = 0;
-//            replyWithSingleMessage(replyToken, new TextMessage("reset: " + yukariPhase.toString()));
-//            return;
-//        }
-//        // ゆかりによるメッセ
-//        if (yukariId != null && senderId != null && !yukariId.isEmpty() && senderId.equals(yukariId)) {
-//            if (yukariPhase == 0) {
-//                replyWithMessages(replyToken,
-//                        ImmutableList.of(
-//                                new TextMessage("仕事お疲れ様！！")
-//                        ));
-//            } else if (yukariPhase == 1) {
-//                replyWithMessages(replyToken,
-//                        ImmutableList.of(
-//                                new TextMessage("単刀直入にね！ゆかりが好きなんよ"),
-//                                new TextMessage("知ってただろうけど！")
-//                        ));
-//            } else if (yukariPhase == 2) {
-//                replyWithMessages(replyToken,
-//                        ImmutableList.of(
-//                                new TextMessage("色々壁はあって、少し悩んでたし、遠慮していた部分が多かったけど"),
-//                                new TextMessage("でも逆にそれが困惑させてたの、本当に阿呆だった！")
-//                        ));
-//            }  else if (yukariPhase == 3) {
-//                replyWithMessages(replyToken,
-//                        ImmutableList.of(
-//                                new TextMessage("だから、阿呆は阿呆らしく、自分に正直になると、"),
-//                                new TextMessage("これからもずっと一緒に旅行行ったりゲームしたりしたい")
-//                        ));
-//            }  else if (yukariPhase == 4) {
-//                replyWithMessages(replyToken,
-//                        ImmutableList.of(
-//                                new TextMessage("ので！")
-//                        ));
-//            } else {
-//                return;
-//            }
-//            yukariPhase += 1;
-//            return;
-//        }
-
-
         Message message;
         if (text.isEmpty()) {
             message = new TextMessage("内容なすぎ！");
@@ -169,7 +98,7 @@ public class LinebotApplication {
                                                              "頑張りすぎないようにね",
                                                              "大丈夫？おっぱい揉む？");
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
-        } else if (ImmutableList.of("ほめて", "すごい", "でしょ").stream().anyMatch(text::endsWith)) {
+        } else if (ImmutableList.of("ほめて", "でしょ").stream().anyMatch(text::endsWith)) {
             Random r = new Random(System.currentTimeMillis());
             final List<String> candidates = ImmutableList.of("すごい！",
                                                              "がんばったね！",
@@ -177,11 +106,11 @@ public class LinebotApplication {
                                                              "いつも頑張ってるの知ってるよ！",
                                                              "さすがすぎる！");
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
-        } else if (ImmutableList.of("わーい", "やった", "いえーい", "いぇい").stream().anyMatch(text::contains)) {
+        } else if (ImmutableList.of("わーい", "やった", "いえーい", "いぇい", "すごい").stream().anyMatch(text::contains)) {
             Random r = new Random(System.currentTimeMillis());
             final List<String> candidates = ImmutableList.of("わーい！", "やったー！", "いぇい！");
             message = new TextMessage(candidates.get(r.nextInt(candidates.size())));
-        } else if (ImmutableList.of("ありがとう", "感謝", "thank", "うれしい", "嬉しい", "たのしい", "楽しい", "うれちい", "優しい", "やさしい")
+        } else if (ImmutableList.of("ありがとう", "感謝", "thank", "うれしい", "嬉しい", "たのしい", "楽しい", "うれちい", "優しい", "やさしい", "しあわせ", "幸せ")
                                 .stream()
                                 .anyMatch(text::contains)) {
             Random r = new Random(System.currentTimeMillis());
@@ -191,7 +120,7 @@ public class LinebotApplication {
             message = new TextMessage("ありたく「死なないことが大事！」");
         } else if (text.contains("はるふ")
                    && ImmutableList.of("退出", "退出して", "でていって", "出ていって", "退出願います", "ばいばい", "バイバイ", "さよなら",
-                                       "さよーなら", "さようなら").stream()
+                                       "さよーなら", "さようなら", "またね").stream()
                                    .anyMatch(text::endsWith)) {
             leaveCall = leaveRequest(event.getSource());
             if (leaveCall != null) {
