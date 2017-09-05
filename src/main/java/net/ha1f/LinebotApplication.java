@@ -165,7 +165,7 @@ public class LinebotApplication {
             return singleTextReplier.apply(randomized(chooseOne(greeting)));
         }
 
-        if (text.contains("はるふ")) {
+        if (text.contains("はるふ") && !isQuestion) {
             if (ImmutableList.of("すき", "好き").stream().anyMatch(text::contains)) {
                 final List<String> candidates = ImmutableList.of("照れるやん！！",
                                                                  "嬉しい",
