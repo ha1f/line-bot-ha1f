@@ -165,6 +165,23 @@ public class LinebotApplication {
             return singleTextReplier.apply(randomized(chooseOne(greeting)));
         }
 
+        if (text.contains("はるふ")) {
+            if (ImmutableList.of("すき", "好き").stream().anyMatch(text::contains)) {
+                final List<String> candidates = ImmutableList.of("照れるやん！！",
+                                                                 "嬉しい",
+                                                                 "好き・・・"
+                );
+                return singleTextReplier.apply(chooseOne(candidates));
+            }
+            if (text.contains("ひど")) {
+                final List<String> candidates = ImmutableList.of("ごめんね",
+                                                                 "ひどいね",
+                                                                 "・・・ごめん"
+                );
+                return singleTextReplier.apply(chooseOne(candidates));
+            }
+        }
+
         if (ImmutableList.of("すき", "好き").stream().anyMatch(text::endsWith)) {
             if (isQuestion) {
                 final List<String> candidates = ImmutableList.of(
@@ -289,23 +306,6 @@ public class LinebotApplication {
                                                              normalized + "する"
             );
             return singleTextReplier.apply(randomized(chooseOne(candidates)));
-        }
-
-        if (text.contains("はるふ")) {
-            if (ImmutableList.of("すき", "好き").stream().anyMatch(text::contains)) {
-                final List<String> candidates = ImmutableList.of("照れるやん！！",
-                                                                 "嬉しい",
-                                                                 "好き・・・"
-                );
-                return singleTextReplier.apply(chooseOne(candidates));
-            }
-            if (text.contains("ひど")) {
-                final List<String> candidates = ImmutableList.of("ごめんね",
-                                                                 "ひどいね",
-                                                                 "・・・ごめん"
-                );
-                return singleTextReplier.apply(chooseOne(candidates));
-            }
         }
 
         // その他はやでをつける
