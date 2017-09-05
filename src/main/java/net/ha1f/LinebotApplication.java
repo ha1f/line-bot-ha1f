@@ -68,6 +68,8 @@ public class LinebotApplication {
                     .put("いってらっしゃい", ImmutableList.of("いってきます"))
                     .put("いってきます", ImmutableList.of("いってらっしゃい", "がんばってね"))
                     .put("行ってきます", ImmutableList.of("いってらっしゃい", "がんばってね"))
+                    .put("じゃあ", ImmutableList.of("じゃあ"))
+                    .put("オムライス", ImmutableList.of("ポム"))
                     .build();
 
     @Autowired
@@ -169,9 +171,10 @@ public class LinebotApplication {
         }
 
         if (text.contains("はるふ") && !isQuestion) {
-            if (ImmutableList.of("すき", "好き").stream().anyMatch(text::contains)) {
+            if (ImmutableList.of("すき", "好き", "えらい").stream().anyMatch(text::contains)) {
                 final List<String> candidates = ImmutableList.of("照れるやん！！",
                                                                  "嬉しい",
+                                                                 "ありがとう",
                                                                  "好き・・・"
                 );
                 return singleTextReplier.apply(chooseOne(candidates));
