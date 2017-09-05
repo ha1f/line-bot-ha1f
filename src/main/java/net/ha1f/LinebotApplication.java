@@ -68,6 +68,8 @@ public class LinebotApplication {
                     .put("いってらっしゃい", ImmutableList.of("いってきます"))
                     .put("いってきます", ImmutableList.of("いってらっしゃい", "がんばってね"))
                     .put("行ってきます", ImmutableList.of("いってらっしゃい", "がんばってね"))
+                    .put("ただいま", ImmutableList.of("おかえり"))
+                    .put("おかえり", ImmutableList.of("ただいま"))
                     .put("じゃあ", ImmutableList.of("じゃあ"))
                     .put("オムライス", ImmutableList.of("ポム"))
                     .build();
