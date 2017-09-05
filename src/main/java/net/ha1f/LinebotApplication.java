@@ -57,13 +57,15 @@ public class LinebotApplication {
     private static final Pattern HAPPY_INTERJECTION = Pattern.compile(
             "^((わーい|いぇい|やった|いえーい)+|嬉しい|うれしい|うれちい|うれち|うれし|最高|幸せ|しあわせ|優しい|やさしい)+$");
 
-    private static final Map<String, List<String>> GREETINGS = ImmutableMap.of(
-            "おはよう", ImmutableList.of("おはよう"),
-            "おはよ", ImmutableList.of("おはよう"),
-            "おやすみ", ImmutableList.of("おやすみ"),
-            "よろしくね", ImmutableList.of("こちらこそ"),
-            "はるふ", ImmutableList.of("はるふだよ")
-    );
+    private static final Map<String, List<String>> GREETINGS =
+            new ImmutableMap.Builder<String, List<String>>()
+                    .put("おはよう", ImmutableList.of("おはよう"))
+                    .put("こんにちは", ImmutableList.of("こんにちは"))
+                    .put("おはよ", ImmutableList.of("おはよう"))
+                    .put("おやすみ", ImmutableList.of("おやすみ"))
+                    .put("よろしくね", ImmutableList.of("こちらこそ"))
+                    .put("はるふ", ImmutableList.of("はるふだよ"))
+                    .build();
 
     @Autowired
     private LineMessagingService lineMessagingService;
@@ -163,7 +165,7 @@ public class LinebotApplication {
             return singleTextReplier.apply(randomized(chooseOne(greeting)));
         }
 
-        if (text.endsWith("好き")) {
+        if (ImmutableList.of("すき", "好き").stream().anyMatch(text::endsWith)) {
             if (isQuestion) {
                 final List<String> candidates = ImmutableList.of(
                         "好きに決まってるやん？",
