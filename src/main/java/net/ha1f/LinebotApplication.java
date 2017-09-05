@@ -41,7 +41,7 @@ import retrofit2.Call;
 public class LinebotApplication {
 
     private static final Pattern NOCONTENT_PATTERN = Pattern.compile("^[?？!！…・。、,.〜ーｗw笑 ]+$");
-    private static final Pattern SUFFIX_MARK = Pattern.compile("(やなぁ|だよ|やろ|やん|やんけ|[?？!！。、,.〜ーｗw笑])+$");
+    private static final Pattern SUFFIX_MARK = Pattern.compile("(なん|なの|やなぁ|だよ|やろ|やん|やんけ|[?？!！。、,.〜ーｗw笑])+$");
 
     private static final List<String> GOODBYE_SUFFIXS = ImmutableList.of("退出",
                                                                          "退出して",
@@ -57,14 +57,9 @@ public class LinebotApplication {
     private static final Pattern HAPPY_INTERJECTION = Pattern.compile(
             "^((わーい|いぇい|やった|いえーい)+|嬉しい|うれしい|うれちい|うれち|うれし|最高|幸せ|しあわせ|優しい|やさしい)+$");
 
-    private static final Map<String, String> NP = ImmutableMap.of(
-            "嫌い", "好き",
-            "ぶさいく", "かわいい",
-            "ぶす", "かわいい"
-    );
-
     private static final Map<String, List<String>> GREETINGS = ImmutableMap.of(
             "おはよう", ImmutableList.of("おはよう"),
+            "おはよ", ImmutableList.of("おはよう"),
             "おやすみ", ImmutableList.of("おやすみ"),
             "よろしくね", ImmutableList.of("こちらこそ"),
             "はるふ", ImmutableList.of("はるふだよ")
@@ -141,7 +136,7 @@ public class LinebotApplication {
         final Boolean isNoContent = NOCONTENT_PATTERN.matcher(originalText).matches();
 
         if (isQuestion) {
-            text = Pattern.compile("(なの|なん)*(かなあ|かなぁ)+$").matcher(text).replaceFirst("");
+            text = Pattern.compile("(かなあ|かなぁ)+$").matcher(text).replaceFirst("");
         }
 
         // wwみたいなときはオウム返し
@@ -179,13 +174,14 @@ public class LinebotApplication {
                             "好きすぎ"
                     );
                     return singleTextReplier.apply(chooseOne(candidates));
-                } else if (text.endsWith("嫌い")) {
-                    final List<String> candidates = ImmutableList.of(
-                            "なんでそんなこと聞くん？",
-                            "そんなわけなくない？？むしろ・・・"
-                    );
-                    return singleTextReplier.apply(chooseOne(candidates));
                 }
+            }
+            if (ImmutableList.of("嫌い", "きらい").stream().anyMatch(text::contains)) {
+                final List<String> candidates = ImmutableList.of(
+                        "なんでそんなこと聞くん？",
+                        "そんなわけなくない？？"
+                );
+                return singleTextReplier.apply(chooseOne(candidates));
             }
         }
 
@@ -202,13 +198,15 @@ public class LinebotApplication {
             );
             return singleTextReplier.apply(chooseOne(candidates));
         }
-        if (ImmutableList.of("さみしい", "寂しい").stream().anyMatch(text::contains)) {
+        if (ImmutableList.of("さみしい", "寂しい", "あいたい", "会いたい").stream().anyMatch(text::contains)) {
             final List<String> candidates = ImmutableList.of("はるふがいる！",
                                                              "元気出して！",
                                                              "今度ご飯行こうな",
                                                              "次あった時ぎゅってしような",
                                                              "今度あそびに行こうね",
-                                                             "おいで"
+                                                             "おいで",
+                                                             "会いたい",
+                                                             "ぎゅってしたい"
             );
             return singleTextReplier.apply(chooseOne(candidates));
         }
@@ -231,7 +229,7 @@ public class LinebotApplication {
             return singleTextReplier.apply(chooseOne(candidates));
         }
 
-        if (ImmutableList.of("ありがとう", "感謝", "thank").stream().anyMatch(text::contains)) {
+        if (ImmutableList.of("ありがとう", "感謝", "thanks", "ありがと").stream().anyMatch(text::endsWith)) {
             final List<String> candidates = ImmutableList.of("いえいえ", "こちらこそ！", "どういたしまして〜😊", "ありがと！");
             return singleTextReplier.apply(chooseOne(candidates));
         }
@@ -254,11 +252,23 @@ public class LinebotApplication {
             );
             return singleTextReplier.apply(chooseOne(candidates));
         }
-        if (ImmutableList.of("あそんで", "遊んで", "あそぼ", "ハグして").stream().anyMatch(text::endsWith)) {
+        if (ImmutableList.of("あそんで", "遊んで", "あそぼ", "ハグして", "遊びたい", "あそびたい").stream().anyMatch(text::endsWith)) {
             final List<String> candidates = ImmutableList.of("あそぼ",
                                                              "あそんで",
                                                              "約束やで",
                                                              "ハグしよ"
+            );
+            return singleTextReplier.apply(randomized(chooseOne(candidates)));
+        }
+        if (ImmutableList.of("して", "したい", "したいの").stream().anyMatch(text::endsWith)) {
+            String normalized = text.replace("して", "")
+                                    .replace("したいの", "")
+                                    .replace("したい", "")
+                                    .replace("びたい", "");
+            final List<String> candidates = ImmutableList.of("まかせて",
+                                                             "まかしとき",
+                                                             "約束やで",
+                                                             normalized + "する"
             );
             return singleTextReplier.apply(randomized(chooseOne(candidates)));
         }
