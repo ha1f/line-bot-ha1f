@@ -327,15 +327,52 @@ public class LinebotApplication {
         replyTextMessage(event);
     }
 
+    private BotApiResponse replyStickerMessage(MessageEvent<StickerMessageContent> event) throws Exception {
+        final Function<List<Message>, BotApiResponse> replier = getReplier(event.getReplyToken());
+
+        final String packageId = event.getMessage().getPackageId();
+        final String stickerId = event.getMessage().getStickerId();
+
+        if ("1184321".equals(packageId)) {
+            // 博多弁
+            if ("7496267".equals(stickerId)) {
+                // ばりむかつく
+                return replier.apply(Collections.singletonList(new TextMessage("ムカつかんで！！")));
+            } else if ("7496257".equals(stickerId)) {
+                // もうねるけん おやすみー
+                return replier.apply(Collections.singletonList(new TextMessage("もうねちゃうんね・・・おやすみ〜")));
+            } else if ("7496263".equals(stickerId)) {
+                // たのしみにしとーけん
+                return replier.apply(Collections.singletonList(new TextMessage("ぼくもたのしみ！！")));
+            } else if ("7496271".equals(stickerId)) {
+                // よかろうもん
+                return replier.apply(Collections.singletonList(new TextMessage("博多弁かわいいね！よきよき！")));
+            } else if ("7496237".equals(stickerId)) {
+                // よかよか
+                return replier.apply(Collections.singletonList(new TextMessage("よきよき！")));
+            } else if ("7496266".equals(stickerId)) {
+                // ばりきつ
+                return replier.apply(Collections.singletonList(new TextMessage("きつない！！")));
+            } else if ("7496262".equals(stickerId)) {
+                // よかろ？
+                return replier.apply(Collections.singletonList(new TextMessage("めっちゃいい！！")));
+            } else {
+                return replier.apply(Collections.singletonList(new TextMessage("博多弁かわいいね")));
+            }
+        } else if ("1252013".equals(packageId)) {
+
+        }
+
+        return replier.apply(
+                Collections.singletonList(new TextMessage(
+                        "スタンプ送信ありがとうございます！" + event.getMessage().getPackageId()
+                        + " : " + event.getMessage().getStickerId())));
+    }
+
     @EventMapping
     public void handleStickerMessage(MessageEvent<StickerMessageContent> event) throws Exception {
         logEvent(event);
-        final BotApiResponse apiResponse = lineMessagingService
-                .replyMessage(new ReplyMessage(event.getReplyToken(),
-                                               Collections.singletonList(new TextMessage(
-                                                       "スタンプ送信ありがとうございます！" + event.getMessage().getPackageId()
-                                                       + " : " + event.getMessage().getStickerId()))))
-                .execute().body();
+        final BotApiResponse apiResponse = replyStickerMessage(event);
         System.out.println("Sent messages: " + apiResponse);
     }
 
