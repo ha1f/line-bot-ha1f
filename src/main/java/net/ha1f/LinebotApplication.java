@@ -292,7 +292,7 @@ public class LinebotApplication {
         }
 
         if (text.contains("はるふ")) {
-            if (text.contains("好き")) {
+            if (ImmutableList.of("すき", "好き").stream().anyMatch(text::contains)) {
                 final List<String> candidates = ImmutableList.of("照れるやん！！",
                                                                  "嬉しい",
                                                                  "好き・・・"
