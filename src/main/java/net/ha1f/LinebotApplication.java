@@ -40,7 +40,7 @@ import retrofit2.Call;
 @LineMessageHandler
 public class LinebotApplication {
 
-    private static final Pattern NOCONTENT_PATTERN = Pattern.compile("^ん*[?？!！…・。、,.〜ーｗw笑 ]+$");
+    private static final Pattern NOCONTENT_PATTERN = Pattern.compile("^[ぁ-ん]?[?？!！…・。、,.〜ーｗw笑 ]+$");
     private static final Pattern SUFFIX_MARK = Pattern.compile("(なん|なの|やなぁ|だよ|やろ|やん|やんけ|[?？!！。、,.〜ーｗw笑])+$");
 
     private static final List<String> GOODBYE_SUFFIXS = ImmutableList.of("退出",
