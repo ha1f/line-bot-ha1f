@@ -362,7 +362,36 @@ public class LinebotApplication {
                 return replier.apply(Collections.singletonList(new TextMessage("博多弁かわいいね")));
             }
         } else if ("1252013".equals(packageId)) {
-
+            // 関西弁のうるせぇトリ
+            if ("10221072".equals(stickerId)) {
+                // もぐもぐ
+            } else if ("10221073".equals(stickerId)) {
+                // ナイス, いいね, goodjob
+            } else if ("10221074".equals(stickerId)) {
+                // おはようさん
+            } else if ("10221075".equals(stickerId)) {
+                // 屁こいて寝るわ
+            } else if ("10221076".equals(stickerId)) {
+                // なんでやねん（ペチ）
+            } else if ("10221077".equals(stickerId)) {
+                // なんでやねん！
+            } else if ("10221078".equals(stickerId)) {
+                // アカーン
+            } else if ("10221079".equals(stickerId)) {
+                // オモロｗ
+            } else if ("10221080".equals(stickerId)) {
+                // せやろ♪
+            } else if ("10221081".equals(stickerId)) {
+                // せやな
+            } else if ("10221082".equals(stickerId)) {
+                // ええやん！
+            } else if ("10221083".equals(stickerId)) {
+                // ええで！
+            } else if ("10221084".equals(stickerId)) {
+                // おおきに
+            } else if ("10221085".equals(stickerId)) {
+                // かんにんやで
+            }
         }
 
         return replier.apply(
