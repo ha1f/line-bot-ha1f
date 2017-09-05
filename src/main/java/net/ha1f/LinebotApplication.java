@@ -207,7 +207,7 @@ public class LinebotApplication {
             }
         }
 
-        if (ImmutableList.of("嫌い", "きらい", "うざい").stream().anyMatch(text::contains)) {
+        if (ImmutableList.of("嫌い", "きらい", "うざい").stream().anyMatch(text::endsWith)) {
             if (isQuestion) {
                 final List<String> candidates = ImmutableList.of(
                         "なんでそんなこと聞くん？",
@@ -218,8 +218,7 @@ public class LinebotApplication {
                 final List<String> candidates = ImmutableList.of(
                         "うそ",
                         "ごめん、でも僕は好きやで",
-                        "やだ！！",
-                        "嫌いやで"
+                        "やだ！！"
                 );
                 return singleTextReplier.apply(chooseOne(candidates));
             }
