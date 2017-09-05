@@ -138,7 +138,7 @@ public class LinebotApplication {
         final Boolean isNoContent = NOCONTENT_PATTERN.matcher(originalText).matches();
 
         if (isQuestion) {
-            text = Pattern.compile("(かなあ|かなぁ)+$").matcher(text).replaceFirst("");
+            text = Pattern.compile("(なの|なん)*(かなあ|かなぁ)+$").matcher(text).replaceFirst("");
         }
 
         // wwみたいなときはオウム返し
