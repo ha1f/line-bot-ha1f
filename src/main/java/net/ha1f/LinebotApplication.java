@@ -418,7 +418,7 @@ public class LinebotApplication {
                 return replier.apply(Collections.singletonList(new TextMessage(randomized("知っててくれ"))));
             } else if ("10221088".equals(stickerId)) {
                 // もう嫌や
-                return replier.apply(Collections.singletonList(new TextMessage("よしよし！大丈夫！はるふがいるよ！"));
+                return replier.apply(Collections.singletonList(new TextMessage("よしよし！大丈夫！はるふがいるよ！")));
             } else if ("10221089".equals(stickerId)) {
                 // チラッ
                 return replier.apply(Collections.singletonList(new TextMessage("チラッ")));
