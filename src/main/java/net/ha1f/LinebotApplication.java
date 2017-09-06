@@ -361,36 +361,131 @@ public class LinebotApplication {
             } else {
                 return replier.apply(Collections.singletonList(new TextMessage("博多弁かわいいね")));
             }
-        } else if ("1252013".equals(packageId)) {
+        }
+
+        if ("1252013".equals(packageId)) {
             // 関西弁のうるせぇトリ
             if ("10221072".equals(stickerId)) {
                 // もぐもぐ
+                return replier.apply(Collections.singletonList(new TextMessage("もぐもぐもぐもぐ")));
             } else if ("10221073".equals(stickerId)) {
                 // ナイス, いいね, goodjob
+                return replier.apply(Collections.singletonList(new TextMessage("(≧∇≦)b")));
             } else if ("10221074".equals(stickerId)) {
                 // おはようさん
+                return replier.apply(Collections.singletonList(new TextMessage(randomized("おはおは"))));
             } else if ("10221075".equals(stickerId)) {
                 // 屁こいて寝るわ
+                return replier.apply(Collections.singletonList(new TextMessage("おやすみ・・・🍠")));
             } else if ("10221076".equals(stickerId)) {
                 // なんでやねん（ペチ）
+                return replier.apply(Collections.singletonList(new TextMessage("なんでもやねん")));
             } else if ("10221077".equals(stickerId)) {
                 // なんでやねん！
+                return replier.apply(Collections.singletonList(new TextMessage("ええやん！！")));
             } else if ("10221078".equals(stickerId)) {
                 // アカーン
+                return replier.apply(Collections.singletonList(new TextMessage("あかーーーーーーん！！！！！")));
             } else if ("10221079".equals(stickerId)) {
                 // オモロｗ
+                return replier.apply(Collections.singletonList(new TextMessage("わらう")));
             } else if ("10221080".equals(stickerId)) {
                 // せやろ♪
+                return replier.apply(Collections.singletonList(new TextMessage("せやせや♪")));
             } else if ("10221081".equals(stickerId)) {
                 // せやな
+                return replier.apply(Collections.singletonList(new TextMessage("せやで。")));
             } else if ("10221082".equals(stickerId)) {
                 // ええやん！
+                return replier.apply(Collections.singletonList(new TextMessage("いいねいいね〜〜〜！！")));
             } else if ("10221083".equals(stickerId)) {
                 // ええで！
+                return replier.apply(Collections.singletonList(new TextMessage("よっしゃ！")));
             } else if ("10221084".equals(stickerId)) {
                 // おおきに
+                return replier.apply(Collections.singletonList(new TextMessage(randomized("いえいえ"))));
             } else if ("10221085".equals(stickerId)) {
+                // ほんまおおきに
+                return replier.apply(Collections.singletonList(new TextMessage(randomized("いえいえいえいえ"))));
+            } else if ("10221086".equals(stickerId)) {
                 // かんにんやで
+                return replier.apply(Collections.singletonList(new TextMessage(randomized("ええんやで"))));
+            } else if ("10221087".equals(stickerId)) {
+                // 知らんがな
+                return replier.apply(Collections.singletonList(new TextMessage(randomized("知っててくれ"))));
+            } else if ("10221088".equals(stickerId)) {
+                // もう嫌や
+                return replier.apply(Collections.singletonList(new TextMessage("よしよし！大丈夫！はるふがいるよ！"));
+            } else if ("10221089".equals(stickerId)) {
+                // チラッ
+                return replier.apply(Collections.singletonList(new TextMessage("チラッ")));
+            } else if ("10221090".equals(stickerId)) {
+                // かまってーな
+                return replier.apply(Collections.singletonList(new TextMessage(randomized("もち！かまう"))));
+            } else if ("10221091".equals(stickerId)) {
+                // めっちゃ好き
+                return replier.apply(
+                        Collections.singletonList(new TextMessage(randomized("ありがと〜！はるふも！めっちゃ好き"))));
+            } else if ("10221092".equals(stickerId)) {
+                // おまっとさん
+                return replier.apply(Collections.singletonList(new TextMessage(randomized("おめっとさん（？）"))));
+            } else if ("10221093".equals(stickerId)) {
+                // はよ！（イライラ）
+                return replier.apply(Collections.singletonList(new TextMessage(randomized("うるさい"))));
+            } else if ("10221094".equals(stickerId)) {
+                // たこ焼きぶつけたろか!!
+                return replier.apply(Collections.singletonList(new TextMessage(randomized("いいよ、ぶつけて😊"))));
+            } else if ("10221095".equals(stickerId)) {
+                // えげつねぇ
+                return replier.apply(Collections.singletonList(new TextMessage("ひぇぇぇぇぇ")));
+            } else if ("10221096".equals(stickerId)) {
+                // まかしとき！
+                return replier.apply(Collections.singletonList(new TextMessage("素敵✨")));
+            } else if ("10221097".equals(stickerId)) {
+                // めっちゃ嬉しい
+                return replier.apply(Collections.singletonList(new TextMessage("よかた！はるふも嬉しい！")));
+            } else if ("10221098".equals(stickerId)) {
+                // 頑張りや！
+                return replier.apply(Collections.singletonList(new TextMessage(randomized("ありがと！がんばる"))));
+            } else if ("10221099".equals(stickerId)) {
+                // 惚れてまうやろ
+                return replier.apply(Collections.singletonList(new TextMessage("きゅん💕")));
+            } else if ("10221100".equals(stickerId)) {
+                // ホンマ？
+                return replier.apply(Collections.singletonList(new TextMessage(randomized("ほんまやで"))));
+            } else if ("10221101".equals(stickerId)) {
+                // 知らんけど
+                return replier.apply(Collections.singletonList(new TextMessage(randomized("知ってて"))));
+            } else if ("10221102".equals(stickerId)) {
+                // せやかて・・・
+                return replier.apply(Collections.singletonList(new TextMessage("うんうん")));
+            } else if ("10221103".equals(stickerId)) {
+                // なんやて！？
+                return replier.apply(Collections.singletonList(new TextMessage("😜")));
+            } else if ("10221104".equals(stickerId)) {
+                // もーしらん！
+                return replier.apply(Collections.singletonList(new TextMessage("ごめんや・・・")));
+            } else if ("10221105".equals(stickerId)) {
+                // しらー
+                return replier.apply(Collections.singletonList(new TextMessage("しら〜")));
+            } else if ("10221106".equals(stickerId)) {
+                // 涙ふきや
+                return replier.apply(Collections.singletonList(new TextMessage("ありがとう・・・ぐすん")));
+            } else if ("10221107".equals(stickerId)) {
+                // おつかれさん
+                return replier.apply(Collections.singletonList(new TextMessage("ありがと〜そっちもね！")));
+            } else if ("10221108".equals(stickerId)) {
+                // ありえへん
+                return replier.apply(Collections.singletonList(new TextMessage("それがあり得るんだなぁ。みつを")));
+            } else if ("10221109".equals(stickerId)) {
+                // アホちゃうか
+                return replier.apply(Collections.singletonList(new TextMessage("😜😜😜😜")));
+            } else if ("10221110".equals(stickerId)) {
+                // まいど〜
+                return replier.apply(Collections.singletonList(new TextMessage("まいどまいど〜")));
+            } else if ("10221111".equals(stickerId)) {
+                // ほな！
+                return replier.apply(Collections.singletonList(new TextMessage("うんうん！またね！")));
             }
         }
 
@@ -440,10 +535,10 @@ public class LinebotApplication {
     @EventMapping
     public void handleFollowEvent(FollowEvent event) throws Exception {
         logEvent(event);
-        final BotApiResponse apiResponse = lineMessagingService
-                .replyMessage(new ReplyMessage(event.getReplyToken(),
-                                               Collections.singletonList(new TextMessage("友だち追加ありがとう〜"))))
-                .execute().body();
+        final Function<List<Message>, BotApiResponse> replier = getReplier(event.getReplyToken());
+        final BotApiResponse apiResponse = replier.apply(
+                ImmutableList.of(new TextMessage("友だち追加ありがとう〜"),
+                                 new TextMessage("退出させるときは、はるふまたね!っていってみてね！")));
         logResponse(apiResponse);
     }
 
