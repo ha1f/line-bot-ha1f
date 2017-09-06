@@ -307,6 +307,9 @@ public class LinebotApplication {
             String normalized = text.replace("して", "")
                                     .replace("したいの", "")
                                     .replace("したい", "");
+            if ("もしか".equals(normalized)) {
+                return singleTextReplier.apply(randomized("もしかする"));
+            }
             final List<String> candidates = ImmutableList.of("まかせて",
                                                              "まかしとき",
                                                              "約束やで",
